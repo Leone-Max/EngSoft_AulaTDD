@@ -1,33 +1,46 @@
 package money.dollar;
 
 abstract class Money  {
-	   int amount;
+	   protected int amount;
+	   
+	   protected String currency;
+
+	   String currency() {
+	      return currency;
+	   }
 	   
 	   public boolean equals(Object object) {
 		      Money money = (Money) object;
 		      return amount == money.amount && getClass().equals(money.getClass());
 	   } 
 	   
-	   static Dollar dollar(int amount)  {
-		      return new Dollar(amount);
+	   static Money dollar(int amount)  {
+		      return new Dollar(amount, "USD");
+		   }
+		   
+	   static Money franc(int amount) {
+	      return new Franc(amount, "CHF");
+	   }
+			
+	   
+	   Money(int amount, String currency) {
+		      this.amount = amount;
+		      this.currency = currency;
 	   }
 	   
-	   static Money franc(int amount) {
-		      return new Franc(amount);
-	    }
-			
 	   abstract Money times(int multiplier);  
 }
 
 class Dollar extends Money {
 	
-	   int amount;
-	   Dollar(int amount) {
-	      this.amount= amount;
-	   }
+	   private int amount;
 	   
+	   Dollar(int amount, String currency)  {
+		      super(amount, currency);
+	   }
+			
 	   Money times(int multiplier)  {
-		      return new Dollar(amount * multiplier);
+	      return Money.dollar(amount * multiplier);
 	   }
 	   
 	   public boolean equals(Object object)  {
@@ -37,13 +50,16 @@ class Dollar extends Money {
 }	
 
 class Franc extends Money{   
-	   int amount;					
-	   Franc(int amount) {      
-	      this.amount= amount;
-	    }					
+	   private int amount;		   
+	   
+	   Franc(int amount, String currency) {
+		      super(amount, currency);
+		   }
+		     
 	   Money times(int multiplier)  {
-		      return new Franc(amount * multiplier);
-	   }  
+	      return Money.franc(amount * multiplier);
+	   }
+	   
 	    public boolean equals(Object object) {					
 	       Franc franc = (Franc) object;      
 	       return amount == franc.amount;					
